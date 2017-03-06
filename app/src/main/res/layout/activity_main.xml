@@ -29,9 +29,19 @@
         android:text="Touch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="67dp"
         android:id="@+id/button2"
-        android:layout_alignTop="@+id/button"
+        android:onClick="startTouchDemo"
+        android:layout_alignBottom="@+id/button3"
+        android:layout_alignStart="@+id/button3"
+        android:layout_marginBottom="69dp" />
+
+    <Button
+        android:text="Gesture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button3"
+        android:onClick="startGestureDemo"
+        android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/button"
-        android:onClick="startTouchDemo"/>
+        android:layout_marginBottom="48dp" />
 </RelativeLayout>

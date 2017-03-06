@@ -32,4 +32,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TouchActivity.class);
         startActivity(intent);
     }
+
+    public void startGestureDemo(View view){
+        Log.v(TAG,"Gesture!");
+
+        Intent intent = new Intent(this, GestureActivity.class);
+        startActivity(intent);
+    }
 }

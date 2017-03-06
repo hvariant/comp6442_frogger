@@ -10,6 +10,8 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import static android.view.MotionEvent.ACTION_UP;
+
 /**
  * Created by spss on 17-3-6.
  */
@@ -28,12 +30,11 @@ public class TouchView extends View implements View.OnTouchListener {
         if(event.getX() < 0 || event.getY() < 0) return false;
 
         points.add(new Pair<>(event.getX(),event.getY()));
-        invalidate();
-
-        if((event.getAction() & MotionEvent.ACTION_UP) != 0){
+        if(event.getActionMasked() == ACTION_UP){
             points.clear();
         }
 
+        invalidate();
         return true;
     }
 
