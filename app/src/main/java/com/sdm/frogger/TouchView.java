@@ -30,6 +30,10 @@ public class TouchView extends View implements View.OnTouchListener {
         points.add(new Pair<>(event.getX(),event.getY()));
         invalidate();
 
+        if((event.getAction() & MotionEvent.ACTION_UP) != 0){
+            points.clear();
+        }
+
         return true;
     }
 
