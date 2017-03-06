@@ -25,4 +25,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
+
+    public void startTouchDemo(View view){
+        Log.v(TAG,"Touch!");
+
+        Intent intent = new Intent(this, TouchActivity.class);
+        startActivity(intent);
+    }
 }
