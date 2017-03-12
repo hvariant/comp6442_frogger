@@ -43,16 +43,16 @@ public class LogSprite extends Sprite {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.WHITE);
 
-        canvas.drawRect(new Rect((int)x,(int)y,(int)(x+w),(int)(y+h)),paint);
+        canvas.drawRect(new Rect((int)getX(),(int)getY(),(int)(getX()+w),(int)(getY()+h)),paint);
     }
 
     @Override
     public boolean update(GameController controller){
-        this.x += vx;
+        setX(getX() + vx);
 
         if(outOfBound(controller.getGameView())){ //turn back!
             this.vx = -vx;
-            this.x += 2*vx;
+            setX(getX() + 2*vx);
         }
 
         return true;

@@ -9,7 +9,7 @@ import android.view.View;
  */
 
 public abstract class Sprite {
-    double x,y;
+    private double x,y;
 
     Sprite(){
         this(0,0);

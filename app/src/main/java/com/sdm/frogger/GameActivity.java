@@ -23,10 +23,10 @@ public class GameActivity extends AppCompatActivity implements GestureDetector.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GameView gameView = new GameView(this);
+        setContentView(gameView);
+
         gameController = new GameController(gameView,this);
         gameController.init();
-
-        setContentView(gameView);
         gameView.setController(gameController);
 
         Timer timer = new Timer();
@@ -57,9 +57,7 @@ public class GameActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onFling(MotionEvent event1, MotionEvent event2,
                            float velocityX, float velocityY) {
-        Log.d(DEBUG_TAG, "onFling: " + event1.toString()+event2.toString());
-
-        //FIXME: detect direction
+//        Log.d(DEBUG_TAG, "onFling: " + event1.toString()+event2.toString());
         gameController.onFling(velocityX,velocityY);
 
         return true;
