@@ -13,16 +13,42 @@ import android.util.Log;
 public class FrogSprite extends Sprite {
     //testing only
     double r;
+    private static double padding = 25;
 
-    FrogSprite(){
-        this(0,0);
-    }
+    double vx;
 
-    FrogSprite(double x, double y){
+    FrogSprite(double x, double y, double r){
         super(x,y);
 
-        r = 50;
+        this.r = r;
+        this.vx = 0;
     }
+
+    public void setVelocity(double vx){
+        this.vx = vx;
+    }
+
+    public boolean onLog(LogSprite logSprite){
+        double lx,ly,lw,lh;
+        lx = logSprite.getX();
+        ly = logSprite.getY();
+        lw = logSprite.getWidth();
+        lh = logSprite.getHeight();
+
+        double cx,cy,cr;
+        cx = getX() + r;
+        cy = getY() + r;
+        double margin = r/2;
+
+        return lx <= (cx - r + margin) && (cx + r - margin) <= (lx + lw) &&
+            ly <= (cy - r + margin) && (cy + r - margin) <= (ly + lh);
+    }
+
+    private boolean dead = false;
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+    public boolean getDead(){ return dead; }
 
     @Override
     public double getWidth(){
@@ -38,16 +64,21 @@ public class FrogSprite extends Sprite {
     public void draw(Canvas canvas){
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
 
-        canvas.drawCircle((float)(getX()+r),(float)(getY()+r),(float)r,paint);
+        if(getDead())
+            paint.setColor(Color.CYAN);
+        else
+            paint.setColor(Color.RED);
+
+        canvas.drawCircle((float)(getX()+r),(float)(getY()+r),(float)(r - padding),paint);
     }
 
     @Override
     public boolean update(GameController controller){
         FlingInput input = controller.getInput();
+        boolean flag = false;
 
-        if(input != null){
+        if(input != null && !getDead()){
             double x_old,y_old;
 
             x_old = getX();
@@ -79,9 +110,14 @@ public class FrogSprite extends Sprite {
                 setY(y_old);
             }
 
-            return true;
+            flag = true;
         }
 
-        return false;
+//        Log.d("FrogSprite", "vx = " + vx);
+
+        if(!getDead())
+            setX(getX() + vx);
+
+        return flag;
     }
 }

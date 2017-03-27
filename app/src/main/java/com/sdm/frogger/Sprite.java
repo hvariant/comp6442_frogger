@@ -11,10 +11,6 @@ import android.view.View;
 public abstract class Sprite {
     private double x,y;
 
-    Sprite(){
-        this(0,0);
-    }
-
     Sprite(double x,double y) {
         this.x = x;
         this.y = y;

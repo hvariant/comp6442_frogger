@@ -1,11 +1,13 @@
 package com.sdm.frogger;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Random;
 
 import static com.sdm.frogger.FlingInput.DOWN;
 import static com.sdm.frogger.FlingInput.LEFT;
@@ -21,6 +23,9 @@ public class GameController {
     GameActivity activity;
     ArrayList<Sprite> sprites;
 
+    ArrayList<LogSprite> logSprites;
+    FrogSprite frogSprite;
+
     Object flingInputsLock = new Object();
     LinkedList<FlingInput> flingInputs;
 
@@ -29,6 +34,7 @@ public class GameController {
         this.activity = activity;
 
         this.sprites = new ArrayList<>();
+        this.logSprites = new ArrayList<>();
         this.flingInputs = new LinkedList<>();
     }
 
@@ -78,33 +84,68 @@ public class GameController {
         return ret;
     }
 
+    private int dH = 200;
+
     public void init(){
+        BGSprite water = new BGSprite(0,2*dH,1080,3*dH, Color.BLUE);
+        this.getSprites().add(water);
+
+        BGSprite land = new BGSprite(0,0,1080,2*dH, Color.GREEN);
+        this.getSprites().add(land);
+
+        BGSprite land2 = new BGSprite(0,5*dH,1080,1920-5*dH, Color.GREEN);
+        this.getSprites().add(land2);
+
+        Random random = new Random();
         //testing only
-        LogSprite logSprite = new LogSprite(100,100,20);
-        this.getSprites().add(logSprite);
+        for(int i=0;i<3;i++) {
+            LogSprite logSprite = new LogSprite(0, 2*dH+dH*i, dH, 10+10*random.nextDouble());
+            this.getSprites().add(logSprite);
+            this.logSprites.add(logSprite);
+        }
 
         //center of screen
-        FrogSprite frogSprite = new FrogSprite(500, 1000);
+        frogSprite = new FrogSprite(540 - dH/2, 7*dH, dH/2);
         this.getSprites().add(frogSprite);
     }
 
     public void tick(){
         //Log.d("GameController","tick = " + System.currentTimeMillis());
-        boolean dirty = false;
-        for(Sprite sprite: sprites){
-            if(sprite.update(this)){
-                dirty = true;
+
+        // collision detection
+        if(!frogSprite.getDead()) {
+            LogSprite attachedLog = null;
+            for (LogSprite logSprite : logSprites) {
+                if (frogSprite.onLog(logSprite)) {
+                    attachedLog = logSprite;
+                    break;
+                }
+            }
+
+            if (attachedLog != null) {
+                frogSprite.setVelocity(attachedLog.getVelocity());
+            } else {
+                frogSprite.setVelocity(0);
+            }
+
+            if (frogSprite.getY() >= 2*dH && frogSprite.getY() < 5*dH && attachedLog == null) {
+                frogSprite.setDead(true);
             }
         }
 
-        if(dirty){
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    gameView.invalidate();
-                }
-            });
+        for (Sprite sprite : logSprites) {
+            sprite.update(this);
         }
+        frogSprite.update(this);
+
+//        Log.d("LogSprite","vx=" + logSprites.get(2).getVelocity());
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                gameView.invalidate();
+            }
+        });
     }
 
     //FIXME

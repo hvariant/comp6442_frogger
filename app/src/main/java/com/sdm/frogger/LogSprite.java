@@ -15,17 +15,17 @@ public class LogSprite extends Sprite {
     double w,h;
     double vx;
 
-    LogSprite(){
-        this(0,0,5);
-    }
+    private static double padding = 20;
 
-    LogSprite(double x, double y, double vx){
+    LogSprite(double x, double y, double h, double vx){
         super(x,y);
 
-        w = 100;
-        h = 20;
+        w = 400;
+        this.h = h;
         this.vx = vx;
     }
+
+    public double getVelocity(){ return vx; }
 
     @Override
     public double getWidth(){
@@ -41,9 +41,9 @@ public class LogSprite extends Sprite {
     public void draw(Canvas canvas){
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.YELLOW);
 
-        canvas.drawRect(new Rect((int)getX(),(int)getY(),(int)(getX()+w),(int)(getY()+h)),paint);
+        canvas.drawRect(new Rect((int)getX(),(int)(getY()+padding),(int)(getX()+w),(int)(getY()+h-padding)),paint);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class LogSprite extends Sprite {
 
         if(outOfBound(controller.getGameView())){ //turn back!
             this.vx = -vx;
-            setX(getX() + 2*vx);
+//            setX(getX() + vx);
         }
 
         return true;
